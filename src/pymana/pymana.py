@@ -10,6 +10,7 @@ from constraint import (
     RecursiveBacktrackingSolver,
 )
 
+
 class Color(StrEnum):
     WHITE = "w"
     BLUE = "u"
@@ -191,12 +192,16 @@ triomes = [
 
 
 manabase = Problem(RecursiveBacktrackingSolver())
-manabase.addVariables([*basics, *duals, *surviels, *triomes, *fetchlands], [0, 1,2,3,4])
+manabase.addVariables(
+    [*basics, *duals, *surviels, *triomes, *fetchlands], [0, 1, 2, 3, 4]
+)
 
 
 def parse_args():
     parser = argparse.ArgumentParser(allow_abbrev=True)
-    parser.add_argument("--max-copies", type=int, default=4, help="Max copies of any land")
+    parser.add_argument(
+        "--max-copies", type=int, default=4, help="Max copies of any land"
+    )
     parser.add_argument("--basic", type=int, default=0, help="Number of basic lands")
     parser.add_argument("--dual", type=int, default=0, help="Number of dual lands")
     parser.add_argument(
@@ -454,8 +459,7 @@ def solve_manabase():
     ):
         print("Mana sources must add up to 2 * dual lands + the number of basics")
         print(
-            "Provided sources sum: "
-            + str(args.w + args.u + args.b + args.r + args.g)
+            "Provided sources sum: " + str(args.w + args.u + args.b + args.r + args.g)
         )
         print("Requested pips: " + str(2 * (args.dual + args.surveil) + args.basic))
         return -1
@@ -468,7 +472,7 @@ def solve_manabase():
     for s in solutions:
         eval_fetches = score_solution(evalFetchlands(s), args.fetches)
         max_score = len(eval_fetches) * fetchables
-        evaled.append((s, eval_fetches, sum(eval_fetches.values())/max_score))
+        evaled.append((s, eval_fetches, sum(eval_fetches.values()) / max_score))
 
     for e in sorted(evaled, key=lambda i: i[2]):
         s_str = [f"{str(k)}: {v}" for k, v in sorted(e[0].items()) if v > 0]
@@ -478,6 +482,7 @@ def solve_manabase():
             print(f"\t{land}: {count} fetchable sources")
 
         print()
+
 
 if __name__ == "__main__":
     solve_manabase()
